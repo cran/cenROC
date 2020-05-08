@@ -23,7 +23,7 @@ This function computes the data-driven bandwidth value for smoothing the ROC cur
              It contains three methods: the normal refrence, the plug-in and the cross-validation methods.
 }
 \references{
-Beyene, K. M. and El Ghouch A. (2019). Smoothed time-dependent ROC curves for right-censored survival data. <\url{https://dial.uclouvain.be/pr/boreal/object/boreal:219643}>.
+Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent ROC curves for right-censored survival data. \emph{submitted}.
 }
 \author{
 Kassu Mehari Beyene, Catholic University of Louvain. \code{<kasu.beyene@uclouvain.be>}

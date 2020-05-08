@@ -17,10 +17,10 @@ PI(X, wt, ktype = "normal")
 Returns the computed value for the bandwith parameter.
 }
 \description{
-This function computes the data-driven bandwidth for smoothing the ROC (or distribution) function using the PI method of Beyene and El Ghouch (2019). This is an extension of the classical (unweighted) direct plug-in bandwith selection method to the case of weighted data.
+This function computes the data-driven bandwidth for smoothing the ROC (or distribution) function using the PI method of Beyene and El Ghouch (2020). This is an extension of the classical (unweighted) direct plug-in bandwith selection method to the case of weighted data.
 }
 \details{
-See Beyene and El Ghouch (2019) for details.
+See Beyene and El Ghouch (2020) for details.
 }
 \examples{
 library(cenROC)
@@ -33,7 +33,7 @@ PI(X = X, wt = wt)$bw
 
 }
 \references{
-Beyene, K. M. and El Ghouch A. (2019). Smoothed time-dependent ROC curves for right-censored survival data. <\url{https://dial.uclouvain.be/pr/boreal/object/boreal:219643}>.
+Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent ROC curves for right-censored survival data. \emph{submitted}.
 }
 \author{
 Kassu Mehari Beyene, Catholic University of Louvain. \code{<kasu.beyene@uclouvain.be>}

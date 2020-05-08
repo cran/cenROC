@@ -17,14 +17,14 @@ CV(X, wt, ktype = "normal")
 Returns the computed value for the bandwith parameter.
 }
 \description{
-This function computes the data-driven bandwidth for smoothing the ROC (or distribution) function using the CV method of Beyene and El Ghouch (2019). This is an extension of the classical (unweighted) cross-validation bandwith selection method to the case of weighted data.
+This function computes the data-driven bandwidth for smoothing the ROC (or distribution) function using the CV method of Beyene and El Ghouch (2020). This is an extension of the classical (unweighted) cross-validation bandwith selection method to the case of weighted data.
 }
 \details{
 Bowman et al (1998) proposed the cross-validation bandwidth selection method for unweighted kernal smoothed distribution function. This method is implemented in the \code{R} package \code{kerdiest}.
-We adapted this for the case of weighted data by incorporating the weight variable into the cross-validation function of Bowman's method. See Beyene and El Ghouch (2019) for details.
+We adapted this for the case of weighted data by incorporating the weight variable into the cross-validation function of Bowman's method. See Beyene and El Ghouch (2020) for details.
 }
 \examples{
-\donttest{library(cenROC)
+\dontrun{library(cenROC)
 
 X <- rnorm(100) # random data vector
 wt <- runif(100) # weight vector
@@ -35,7 +35,7 @@ CV(X = X, wt = wt)$bw
 }
 }
 \references{
-Beyene, K. M. and El Ghouch A. (2019). Smoothed time-dependent ROC curves for right-censored survival data. <\url{https://dial.uclouvain.be/pr/boreal/object/boreal:219643}>.
+Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent ROC curves for right-censored survival data. \emph{submitted}.
 
 Bowman A., Hall P. and Trvan T.(1998). Bandwidth selection for the smoothing of distribution functions. \emph{Biometrika} 85:799-808.
 

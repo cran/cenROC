@@ -267,7 +267,7 @@ RocFun <- function(U, D, M, bw = "NR", method, ktype) {
     resul <- (difmat >= 0)
     roc1 <- sweep(resul, 2, D, "*")
     roc <- apply(roc1, 1, sum) / sumD
-    bw1 <- 1
+    bw1 <- NA
   }
   else if (method == "untra") {
     Zt <- Z
@@ -353,3 +353,144 @@ Csurv <- function(Y, M, censor, t, h = NULL, kernel="normal") {
 
 }
 
+
+# Function to compute the knots.
+# This functions are based on the R package intcensROC.
+.knotT <- function(U, V, delta, dim) {
+  size <- dim - 2
+  knot_pre_t = c(U[delta != 1], U[delta != 2], V[delta != 2], V[delta != 3])
+  qt = rep(0, size + 1)
+  qt[1] = 0
+  for (i in 2:(size + 1)) qt[i] = quantile(knot_pre_t, (i - 1)/size, name = F,
+                                           na.rm = TRUE)
+  knots = c(qt[1], qt[1], qt, qt[size + 1], qt[size + 1])
+}
+
+.knotM <- function(marker, dim) {
+  size <- dim - 2
+  knot_pre_m = marker
+  qt = rep(0, size + 1)
+  qt[1] = 0
+  for (i in 2:(size + 1)) qt[i] = quantile(knot_pre_m, (i - 1)/size, name = F,
+                                           na.rm = TRUE)
+  qt[size + 1] = max(marker + 0.1)
+  knots = c(qt[1], qt[1], qt, qt[size + 1], qt[size + 1])
+}
+
+
+#'  Compute the conditional survival function for Interval Censored Survival Data
+#'
+#' @description  A method to compute the survival function for the
+#' interval censored survival data based on a spline function based constrained
+#' maximum likelihood estimator. The maximization process of likelihood is
+#' carried out by generalized gradient projection method.
+#' @usage condS(L, R, M, Delta, t, m)
+#' @param L The numericvector of left limit of observed time. For left censored observations \code{L == 0}.
+#' @param R The numericvector of right limit of observed time. For right censored observation \code{R == inf}.
+#' @param M  An array contains marker levels for the samples.
+#' @param Delta An array of indicator for the censored type, use 1, 2, 3 for
+#' event happened before the left bound time, within the defined time range, and
+#' after.
+#' @param t A scalar indicates the predict time.
+#' @param m A scalar for the cutoff of the marker variable.
+#' @references Wu, Yuan; Zhang, Ying. Partially monotone tensor spline estimation
+#' of the joint distribution function with bivariate current status data.
+#' Ann. Statist. 40, 2012, 1609-1636 <doi:10.1214/12-AOS1016>
+#' @keywords internal
+
+condS <- function(L, R, M, Delta=NULL, t, m) {
+  n <- length(L)
+  U <- L
+  V <- R
+  Marker <- M
+  PredictTime <- t
+  ind <- (U<=0)
+  ind1 <- (V==Inf)
+  if (any(ind1 == TRUE)){
+    V[ind1] <- 10000000
+  }
+  if(is.null(Delta)){
+    Delta <- rep(2, n)
+    Delta[ind] <- 1
+    Delta[ind1] <- 3
+  }
+  if (any(Marker < 0))
+    stop(paste0("Negative marker value found!"))
+
+  # detemine the dimension of spline function
+  size <- length(U)
+  cadSize <- size^(1/3)
+  if (cadSize - floor(cadSize) < ceiling(cadSize) - cadSize) {
+    Dim <- floor(cadSize) + 2
+  } else {
+    Dim <- ceiling(cadSize) + 2
+  }
+
+  # compute the knots for time and marker
+  knotT <- .knotT(U, V, Delta, Dim)
+  knotM <- .knotM(Marker, Dim)
+
+  # compute the thetas
+  theta = .Call("_cenROC_sieve", PACKAGE = "cenROC", U, V, Marker, Delta,
+                knotT, knotM, Dim)
+
+  m2 <- m - 0.0001
+  m  <- m + 0.0001
+  Fm = .Call("_cenROC_surva", PACKAGE = "cenROC", theta, m,
+             m2, PredictTime, knotT, knotM)
+
+  Fest <- 1 - Fm
+
+  return(Fest)
+}
+
+
+
+#' Survival probability conditional on the observed data estimation for interval censored data
+#'
+#' @param L The numericvector of left limit of observed time. For left censored observations \code{L == 0}.
+#' @param R The numericvector of right limit of observed time. For right censored observation \code{R == inf}.
+#' @param M The numeric vector of marker value.
+#' @param t A scaler time point used to calculate the the ROC curve
+#' @param method A character indication type of modeling. This include nonparametric \code{"np"},parmetric \code{"pa"} and semiparametric \code{"sp"}.
+#' @param dist A character incating the type of distribution for parametric model. This includes are \code{"exponential"}, \code{"weibull"}, \code{"gamma"}, \code{"lnorm"}, \code{"loglogistic"} and \code{"generalgamma"}.
+#' @return Return a vectors:
+#' @return \code{positive    }    \code{P(T<t|L,R,M)}.
+#' @return \code{negative    }     \code{P(T>t|L,R,M)}.
+#' @references Beyene, K. M. and El Ghouch A. (2020). Time-dependent ROC curves estimator for interval-censored survival data.
+#' @keywords internal
+
+ICsur <- function( L, R, M,  t,  method, dist) {
+  data <- data.frame(L=L, R=R, M=M)
+  n <- length(M) ;
+  positive <- rep(NA, n);
+  for (i in 1:n) {
+    if (R[i] <= t) {
+      positive[i] <- 1;
+    } else {
+      if (L[i] >= t) {
+        positive[i] <- 0;
+      } else {
+        if (method=="np"){
+          tmp1 <- condS(L=L, R=R, M=M, t=t, m=M[i])
+          tmp2 <- condS(L=L, R=R, M=M, t=L[i], m=M[i])
+          tmp3 <- condS(L=L, R=R, M=M, t=R[i], m=M[i])
+          tmp <- c(tmp1, tmp2, tmp3)
+        } else if (method=="pa"){
+          formula <- Surv(time=L, time2=R, type="interval2") ~ M
+          fit <- ic_par(formula, model = "aft", dist = dist, data=data, weights = NULL)
+          newdat <- data.frame(M=c(M[i]));
+          tmp <- 1 - (getFitEsts(fit, newdat, q=c(t, L[i], R[i])));
+        } else if (method=="sp"){
+          formula <- Surv(time=L, time2=R, type="interval2") ~ M
+          fit <- ic_sp(formula, model = "ph", data=data, weights = NULL)
+          newdat <- data.frame(M=c(M[i]));
+          tmp <- 1 - (getFitEsts(fit, newdat, q=c(t, L[i], R[i])));
+        }
+        positive[i] <- ifelse(R[i]==Inf, 1-(tmp[1]/tmp[2]), ifelse(L[i]==0, (1-tmp[1])/(1-tmp[3]), (tmp[2]-tmp[1])/(tmp[2]-tmp[3])))
+      }
+    }
+  }
+  negative <- 1 - positive;
+  return(list(positive = positive, negative = negative));
+}
