@@ -30,6 +30,6 @@ Return a vectors:
 Survival probability conditional on the observed data estimation for interval censored data
 }
 \references{
-Beyene, K. M. and El Ghouch A. (2020). Time-dependent ROC curves estimator for interval-censored survival data.
+Beyene, K. M. and El Ghouch A. (2022). Time-dependent ROC curve estimation for interval-censored data. \emph{Biometrical Journal}, 64, 1056– 1074.
 }
 \keyword{internal}

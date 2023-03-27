@@ -69,9 +69,12 @@ library(cenROC)
 
 data(hds)
 
-IntROC(L=hds$L, R=hds$R, M=hds$M, t=2)$AUC
+est = IntROC(L=hds$L, R=hds$R, M=hds$M, t=2)
+est$AUC
 
 }
 \references{
-Beyene, K. M. and El Ghouch A. (2020). Time-dependent ROC curves estimator for interval-censored survival data.
+Beyene, K. M. and El Ghouch A. (2022). Time-dependent ROC curve estimation for interval-censored data. \emph{Biometrical Journal}, 64, 1056– 1074.
+
+Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent receiver operating characteristic curve for right censored survival data. \emph{Statistics in Medicine}. 39: 3373– 3396.
 }

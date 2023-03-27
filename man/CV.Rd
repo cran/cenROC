@@ -24,7 +24,7 @@ Bowman et al (1998) proposed the cross-validation bandwidth selection method for
 We adapted this for the case of weighted data by incorporating the weight variable into the cross-validation function of Bowman's method. See Beyene and El Ghouch (2020) for details.
 }
 \examples{
-\dontrun{library(cenROC)
+\donttest{library(cenROC)
 
 X <- rnorm(100) # random data vector
 wt <- runif(100) # weight vector
@@ -35,14 +35,12 @@ CV(X = X, wt = wt)$bw
 }
 }
 \references{
-Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent ROC curves for right-censored survival data. \emph{submitted}.
+Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent receiver operating characteristic curve for right censored survival data. \emph{Statistics in Medicine}. 39: 3373– 3396.
 
 Bowman A., Hall P. and Trvan T.(1998). Bandwidth selection for the smoothing of distribution functions. \emph{Biometrika} 85:799-808.
 
 Quintela-del-Rio, A. and Estevez-Perez, G. (2015). \code{kerdiest:} Nonparametric kernel estimation of the distribution function, bandwidth selection and estimation of related functions. \code{R} package version 1.2.
 }
 \author{
-Kassu Mehari Beyene, Catholic University of Louvain. \code{<kasu.beyene@uclouvain.be>}
-
-Anouar El Ghouch, Catholic University of Louvain. \code{<anouar.elghouch@uclouvain.be>}
+Kassu Mehari Beyene and Anouar El Ghouch
 }

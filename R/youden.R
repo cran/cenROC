@@ -9,12 +9,28 @@
 #'  healthy and diseased groups. To this end, in the literature, several methods for selecting optimal cutoff point have been
 #'  proposed. In this package, we only included the Youden index criteria.
 #'
+#' @return Returns the following items:
+#' @return    \code{Youden.index     } The maximum Youden index value.
+#' @return    \code{cutopt       } The optimal cutoff value.
+#' @return    \code{sens     } The sensitivity corresponding to the optimal cutoff value.
+#' @return    \code{spec      } The specificity corresponding to the optimal cutoff value.
+#'
+#' @references Beyene, K. M. and El Ghouch A. (2022). Time-dependent ROC curve estimation for interval-censored data. \emph{Biometrical Journal}, 64, 1056– 1074.
 #' @references Youden, W.J. (1950). Index for rating diagnostic tests. \emph{Cancer} 3, 32–35.
+#'
 #' @examples library(cenROC)
 #'
+#' # Right censored data
 #' data(mayo)
+#'
 #' resu <- cenROC(Y=mayo$time, M=mayo$mayoscore5, censor=mayo$censor, t=365*6, plot="FALSE")
 #' youden(resu,  plot="TRUE")
+#'
+#' # Interval censored data
+#' data(hds)
+#'
+#' resu1 = IntROC(L=hds$L, R=hds$R, M=hds$M, t=2)
+#' youden(resu1,  plot="TRUE")
 #' @export
 
 youden <- function(est,  plot="FALSE"){

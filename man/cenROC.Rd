@@ -68,16 +68,16 @@ See Beyene and El Ghouch (2020) for details.
 library(cenROC)
 
 data(mayo)
-cenROC(Y=mayo$time, M=mayo$mayoscore5, censor=mayo$censor, t=365*6)$AUC
+
+est = cenROC(Y=mayo$time, M=mayo$mayoscore5, censor=mayo$censor, t=365*6)
+est$AUC
 
 }
 \references{
-Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent ROC curves for right-censored survival data. \emph{submitted}.
+Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent receiver operating characteristic curve for right censored survival data. \emph{Statistics in Medicine}. 39: 3373– 3396.
 
 Sheather, S. J. and Jones, M. C. (1991). A Reliable data-based bandwidth selection method for kernel density estimation. \emph{Journal of the Royal Statistical Society}. Series B (Methodological) 53(3): 683–690.
 }
 \author{
-Kassu Mehari Beyene, Catholic University of Louvain. \code{<kasu.beyene@uclouvain.be>}
-
-Anouar El Ghouch, Catholic University of Louvain. \code{<anouar.elghouch@uclouvain.be>}
+Kassu Mehari Beyene and Anouar El Ghouch
 }

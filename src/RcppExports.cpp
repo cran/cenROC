@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // surva
 double surva(NumericVector thetaTmp, double m, double m2, double t, NumericVector KnotI, NumericVector KnotM);
 RcppExport SEXP _cenROC_surva(SEXP thetaTmpSEXP, SEXP mSEXP, SEXP m2SEXP, SEXP tSEXP, SEXP KnotISEXP, SEXP KnotMSEXP) {

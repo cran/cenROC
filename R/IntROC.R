@@ -35,13 +35,16 @@
 #' @import survival
 #' @importFrom icenReg ic_par ic_sp getFitEsts
 #' @importFrom Rcpp evalCpp
+#'
 #' @examples library(cenROC)
 #'
 #' data(hds)
 #'
-#' IntROC(L=hds$L, R=hds$R, M=hds$M, t=2)$AUC
+#' est = IntROC(L=hds$L, R=hds$R, M=hds$M, t=2)
+#' est$AUC
 #'
-#' @references Beyene, K. M. and El Ghouch A. (2020). Time-dependent ROC curves estimator for interval-censored survival data.
+#' @references Beyene, K. M. and El Ghouch A. (2022). Time-dependent ROC curve estimation for interval-censored data. \emph{Biometrical Journal}, 64, 1056– 1074.
+#' @references Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent receiver operating characteristic curve for right censored survival data. \emph{Statistics in Medicine}. 39: 3373– 3396.
 #' @export
 
 IntROC <-  function(L, R, M, t, U = NULL, method = "emp", method2 = "pa", dist = "weibull", bw = NULL, ktype = "normal", len = 151, B = 0, alpha = 0.05, plot = "TRUE"){
@@ -50,7 +53,7 @@ IntROC <-  function(L, R, M, t, U = NULL, method = "emp", method2 = "pa", dist =
     stop(paste0("Error! all numeric vectors L, M, and t should be specified"))
 
     Dt <- ICsur(L = L, R = R, M = M, t = t, method = method2, dist = dist)$positive;
-    estim <- RocFun(U = U, D = Dt, M = M, method = method, bw = bw);
+    estim <- RocFun(U = U, D = Dt, M = M, method = method, bw = bw, ktype = ktype);
     ROC <- estim$roc;
     AUCc <- 1 - estim$auc;
     AUC <- data.frame(AUC = round(AUCc, 4) , sd = NA, LCL = NA, UCL = NA)

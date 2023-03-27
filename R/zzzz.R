@@ -59,12 +59,13 @@ wIQR <- function(X, wt) {
 #' @param fx The function.
 #' @param n.pts Number of points.
 #' @param method The character string specifying method of numerical integration. The possible options are \code{trap} for trapezoidal rule and \code{simps} for simpson'r rule.
+#' @importFrom methods is
 #' @keywords internal
 
 integ <- function(x, fx, method, n.pts = 256) {
   n = length(x)
   if (method == "simps") {
-    if (class(fx) == "function")
+    if (is.function(fx) == TRUE)
       fx = fx(x)
     if (n != length(fx))
       stop("Unequal input vector lengths")
@@ -251,8 +252,10 @@ kfunc <- function(ktype = "normal", difmat)
 #' @param bw The bandwidth parameter for smoothing the ROC function. The possible options are \code{NR} normal reference method; \code{PI} plug-in method and \code{CV} cross-validation method. The default is the \code{NR} normal reference method.
 #' @param method is the method of ROC curve estimation. The possible options are \code{emp} emperical metod; \code{untra} smooth without boundary correction and \code{tra} is smooth ROC curve estimation with boundary correction.
 #' @param ktype A character string giving the type kernel to be used: "\code{normal}", "\code{epanechnikov}", "\code{biweight}", or "\code{triweight}".
+#'
 #' @author Beyene K. Mehari and El Ghouch Anouar
-#' @references Beyene, K. M. and El Ghouch A. (2019). Smoothed time-dependent ROC curves for right-censored survival data. <\url{https://dial.uclouvain.be/pr/boreal/object/boreal:219643}>.
+#'
+#' @references Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent receiver operating characteristic curve for right censored survival data. \emph{Statistics in Medicine}. 39: 3373– 3396.
 #' @keywords internal
 
 RocFun <- function(U, D, M, bw = "NR", method, ktype) {
@@ -312,9 +315,9 @@ RocFun <- function(U, D, M, bw = "NR", method, ktype) {
 #' @return Return a vectors:
 #' @return \code{positive    }    \code{P(T<t|Y,censor,M)}.
 #' @return \code{negative    }     \code{P(T>t|Y,censor,M)}.
-#' @references Beyene, K. M. and El Ghouch A. (2019). Smoothed time-dependent ROC curves for right-censored survival data. <\url{https://dial.uclouvain.be/pr/boreal/object/boreal:219643}>.
-#' @references Li, Liang, Bo Hu and Tom Greene (2018).  A simple method to estimate the time-dependent receiver operating characteristic curve and the area under the curve with right censored data, Statistical Methods in Medical Research, 27(8): 2264-2278.
-#' @references Pablo Martínez-Camblor and Gustavo F. Bayón and Sonia Pérez-Fernández (2016). Cumulative/dynamic roc curve estimation, Journal of Statistical Computation and Simulation, 86(17): 3582-3594.
+#' @references Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent receiver operating characteristic curve for right censored survival data. \emph{Statistics in Medicine}. 39: 3373– 3396.
+#' @references Li, Liang, Bo Hu and Tom Greene (2018).  A simple method to estimate the time-dependent receiver operating characteristic curve and the area under the curve with right censored data, \emph{Statistical Methods in Medical Research}, 27(8): 2264-2278.
+#' @references Pablo Martínez-Camblor and Gustavo F. Bayón and Sonia Pérez-Fernández (2016). Cumulative/dynamic roc curve estimation, \emph{Journal of Statistical Computation and Simulation}, 86(17): 3582-3594.
 #' @keywords internal
 
 Csurv <- function(Y, M, censor, t, h = NULL, kernel="normal") {
@@ -457,7 +460,7 @@ condS <- function(L, R, M, Delta=NULL, t, m) {
 #' @return Return a vectors:
 #' @return \code{positive    }    \code{P(T<t|L,R,M)}.
 #' @return \code{negative    }     \code{P(T>t|L,R,M)}.
-#' @references Beyene, K. M. and El Ghouch A. (2020). Time-dependent ROC curves estimator for interval-censored survival data.
+#' @references Beyene, K. M. and El Ghouch A. (2022). Time-dependent ROC curve estimation for interval-censored data. \emph{Biometrical Journal}, 64, 1056– 1074.
 #' @keywords internal
 
 ICsur <- function( L, R, M,  t,  method, dist) {

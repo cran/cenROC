@@ -34,16 +34,19 @@
 #' @importFrom stats pnorm qnorm quantile approx bw.SJ integrate sd
 #' @importFrom condSURV Beran
 #' @importFrom graphics abline legend segments text lines polygon
+#'
 #' @examples library(cenROC)
 #'
 #' data(mayo)
-#' cenROC(Y=mayo$time, M=mayo$mayoscore5, censor=mayo$censor, t=365*6)$AUC
+#'
+#' est = cenROC(Y=mayo$time, M=mayo$mayoscore5, censor=mayo$censor, t=365*6)
+#' est$AUC
 #'
 #' @author
-#' Kassu Mehari Beyene, Catholic University of Louvain. \code{<kasu.beyene@uclouvain.be>}
 #'
-#' Anouar El Ghouch, Catholic University of Louvain. \code{<anouar.elghouch@uclouvain.be>}
-#' @references Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent ROC curves for right-censored survival data. \emph{submitted}.
+#' Kassu Mehari Beyene and Anouar El Ghouch
+#'
+#' @references Beyene, K. M. and El Ghouch A. (2020). Smoothed time-dependent receiver operating characteristic curve for right censored survival data. \emph{Statistics in Medicine}. 39: 3373– 3396.
 #' @references Sheather, S. J. and Jones, M. C. (1991). A Reliable data-based bandwidth selection method for kernel density estimation. \emph{Journal of the Royal Statistical Society}. Series B (Methodological) 53(3): 683–690.
 #' @export
 
@@ -53,7 +56,7 @@ cenROC <- function(Y, M, censor, t, U = NULL, h = NULL, bw = "NR",  method = "tr
     if (!is.vector(Y, mode = "numeric") |
         !is.vector(M, mode = "numeric") |
         !is.vector(censor, mode = "numeric"))
-      print("Error! all numeric vectors Y, M and censor should be specified")
+      warning("Error! all numeric vectors Y, M and censor should be specified")
     else{
       Dt <- Csurv(Y = Y, M = M, censor = censor, t = t, h = h, kernel = ktype1)$positive
       estim <- RocFun(U = U, D = Dt, M = M, method = method, bw = bw, ktype = ktype)

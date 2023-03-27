@@ -11,6 +11,17 @@ youden(est, plot = "FALSE")
 
 \item{plot}{The logical parameter to see the ROC curve plot along with the Youden inex. The default is \code{TRUE}.}
 }
+\value{
+Returns the following items:
+
+\code{Youden.index     } The maximum Youden index value.
+
+\code{cutopt       } The optimal cutoff value.
+
+\code{sens     } The sensitivity corresponding to the optimal cutoff value.
+
+\code{spec      } The specificity corresponding to the optimal cutoff value.
+}
 \description{
 This function computes the optimal cutoff point using the Youden index criteria of both right and interval censored time-to-event data.
               The Youden index estimator can be either empirical (non-smoothed) or smoothed with/without boundary correction.
@@ -24,10 +35,20 @@ In medical decision-making, obtaining the optimal cutoff value is crucial to ide
 \examples{
 library(cenROC)
 
+# Right censored data
 data(mayo)
+
 resu <- cenROC(Y=mayo$time, M=mayo$mayoscore5, censor=mayo$censor, t=365*6, plot="FALSE")
 youden(resu,  plot="TRUE")
+
+# Interval censored data
+data(hds)
+
+resu1 = IntROC(L=hds$L, R=hds$R, M=hds$M, t=2)
+youden(resu1,  plot="TRUE")
 }
 \references{
+Beyene, K. M. and El Ghouch A. (2022). Time-dependent ROC curve estimation for interval-censored data. \emph{Biometrical Journal}, 64, 1056– 1074.
+
 Youden, W.J. (1950). Index for rating diagnostic tests. \emph{Cancer} 3, 32–35.
 }
